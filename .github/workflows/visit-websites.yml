@@ -1,0 +1,22 @@
+name: Visit Websites Every Monday
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每周一的 00:00 运行
+
+jobs:
+  visit:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Visit media.ailoha.com
+      run: curl https://media.ailoha.com
+
+    - name: Visit bids.ailoha.com
+      run: curl https://bids.ailoha.com
+
+    - name: Visit odi-demo.vercel.app
+      run: curl https://odi-demo.vercel.app
