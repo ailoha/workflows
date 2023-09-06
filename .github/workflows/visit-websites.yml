@@ -1,8 +1,8 @@
-name: Visit Websites Every Monday
+name: Visit Websites Every Day
 
 on:
   schedule:
-    - cron: '0 * * * *'  # 每周一的 00:00 运行
+    - cron: '0 * * * *'  # 每小时运行一次
 
 jobs:
   visit:
