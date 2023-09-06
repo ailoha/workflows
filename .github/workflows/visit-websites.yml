@@ -12,11 +12,30 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Visit media.ailoha.com
-      run: curl https://media.ailoha.com
+    - name: Setup Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16'
 
-    - name: Visit bids.ailoha.com
-      run: curl https://bids.ailoha.com
+    - name: Install Puppeteer
+      run: npm install puppeteer
 
-    - name: Visit odi-demo.vercel.app
-      run: curl https://odi-demo.vercel.app
+    - name: Visit Websites
+      run: |
+        const puppeteer = require('puppeteer');
+
+        (async () => {
+          const browser = await puppeteer.launch();
+          const page = await browser.newPage();
+
+          await page.goto('https://media.ailoha.com');
+          await page.waitForTimeout(60000); // Wait for 5 seconds
+
+          await page.goto('https://bids.ailoha.com');
+          await page.waitForTimeout(60000); // Wait for 5 seconds
+
+          await page.goto('https://odi-demo.vercel.app');
+          await page.waitForTimeout(60000); // Wait for 5 seconds
+
+          await browser.close();
+        })();
