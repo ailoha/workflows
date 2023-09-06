@@ -1,4 +1,4 @@
-name: Visit Websites Every Day
+name: Visit Websites Every 5 Minutes
 
 on:
   schedule:
@@ -17,25 +17,11 @@ jobs:
       with:
         node-version: '16'
 
+    - name: Install Puppeteer dependencies
+      run: sudo apt-get install -y libx11-xcb1 libxcomposite1 libxdamage1 libxi6 libxext6 libxfixes3 libnss3 libasound2 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libdbus-1-3 libgbm1 libgtk-3-0
+
     - name: Install Puppeteer
       run: npm install puppeteer
 
-    - name: Visit Websites
-      run: |
-        const puppeteer = require('puppeteer');
-
-        (async () => {
-          const browser = await puppeteer.launch();
-          const page = await browser.newPage();
-
-          await page.goto('https://media.ailoha.com');
-          await page.waitForTimeout(60000); // Wait for 5 seconds
-
-          await page.goto('https://bids.ailoha.com');
-          await page.waitForTimeout(60000); // Wait for 5 seconds
-
-          await page.goto('https://odi-demo.vercel.app');
-          await page.waitForTimeout(60000); // Wait for 5 seconds
-
-          await browser.close();
-        })();
+    - name: Run visitWebsite.js
+      run: node ./visit-website/visitWebsite.js
