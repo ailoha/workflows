@@ -8,7 +8,7 @@ async function visitWebsite(page, url) {
 }
 
 (async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({ headless: false });
   const page = await browser.newPage();
 
   // 使用 forEach 循环来访问每个网站
