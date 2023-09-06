@@ -5,10 +5,17 @@ const websites = require('./websites.json');  // 使用 require 读取 JSON 文�
 async function visitWebsite(page, url) {
   await page.goto(url).catch(e => console.error(`Failed to visit ${url}: ${e.message}`));
   await page.waitForTimeout(60000); // 等待 60 秒
+
+  // 尝试点击 Home 键
+  try {
+    await page.click('a:contains("Home")');
+  } catch (e) {
+    console.error(`Failed to click Home link on ${url}: ${e.message}`);
+  }
 }
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   // 使用 forEach 循环来访问每个网站
