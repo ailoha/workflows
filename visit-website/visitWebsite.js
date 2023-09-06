@@ -8,7 +8,12 @@ async function visitWebsite(page, url) {
 
   // 尝试点击 Home 键
   try {
-    await page.click('a:contains("Home")');
+    await page.evaluate(() => {
+      const homeLink = Array.from(document.querySelectorAll('a')).find(el => el.textContent === 'Home');
+      if (homeLink) {
+        homeLink.click();
+      }
+    });
   } catch (e) {
     console.error(`Failed to click Home link on ${url}: ${e.message}`);
   }
