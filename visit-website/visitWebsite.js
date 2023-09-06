@@ -3,7 +3,7 @@ const websites = require('./websites.json');  // 使用 require 读取 JSON 文�
 
 // 创建一个函数来处理网站访问和等待
 async function visitWebsite(page, url) {
-  await page.goto(url);
+  await page.goto(url).catch(e => console.error(`Failed to visit ${url}: ${e.message}`));
   await page.waitForTimeout(60000); // 等待 60 秒
 }
 
