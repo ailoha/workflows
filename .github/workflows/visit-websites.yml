@@ -1,8 +1,9 @@
-name: Visit Websites Every 5 Minutes
+name: Visit Websites Every Day
 
 on:
   schedule:
-    - cron: '*/5 * * * *'  # 每5分钟运行一次
+    - cron: '0 0 * * *'  # 每天 00:00 运行一次
+  workflow_dispatch: # 启用手动触发
 
 jobs:
   visit:
