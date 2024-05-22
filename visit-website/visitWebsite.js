@@ -1,10 +1,11 @@
 const puppeteer = require('puppeteer');
+const { setTimeout } = require('timers/promises'); // 引入 setTimeout
 const websites = require('./websites.json');  // 使用 require 读取 JSON 文件
 
 // 创建一个函数来处理网站访问和等待
 async function visitWebsite(page, url) {
   await page.goto(url).catch(e => console.error(`Failed to visit ${url}: ${e.message}`));
-  await page.waitForTimeout(60000); // 等待 60 秒
+  await setTimeout(60000); // 使用 setTimeout 替代 page.waitForTimeout
 
   // 尝试点击 Home 键
   try {
