@@ -1,30 +1,39 @@
-const puppeteer = require('puppeteer');
-const { setTimeout } = require('timers/promises'); // 引入 setTimeout
-const websites = require('./websites.json');  // 使用 require 读取 JSON 文件
+const { chromium } = require('playwright');
+const { setTimeout } = require('timers/promises');
+const websites = require('./websites.json');
 
-// 创建一个函数来处理网站访问和等待
 async function visitWebsite(page, url) {
-  await page.goto(url).catch(e => console.error(`Failed to visit ${url}: ${e.message}`));
-  await setTimeout(60000); // 使用 setTimeout 替代 page.waitForTimeout
-
-  // 尝试点击 Home 键
   try {
-    await page.evaluate(() => {
-      const homeLink = Array.from(document.querySelectorAll('a')).find(el => el.textContent === 'Home');
-      if (homeLink) {
-        homeLink.click();
+    console.log(`Visiting ${url}`);
+    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60000 });
+
+    // 停留 60 秒，模拟用户停留
+    await setTimeout(60000);
+
+    // 尝试点击页面上的“Home”链接
+    try {
+      const homeLink = await page.locator('a:has-text("Home")').first();
+      if (await homeLink.count() > 0) {
+        await homeLink.click();
+        console.log(`Clicked Home link on ${url}`);
+        await setTimeout(5000); // 停留 5 秒
       }
-    });
-  } catch (e) {
-    console.error(`Failed to click Home link on ${url}: ${e.message}`);
+    } catch (err) {
+      console.error(`Failed to click Home link on ${url}: ${err.message}`);
+    }
+
+  } catch (err) {
+    console.error(`Failed to visit ${url}: ${err.message}`);
   }
 }
 
 (async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
+  const browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext({
+    userAgent: "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122 Safari/537.36"
+  });
+  const page = await context.newPage();
 
-  // 使用 forEach 循环来访问每个网站
   for (const website of websites) {
     await visitWebsite(page, website);
   }
